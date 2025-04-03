@@ -2,16 +2,22 @@ import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
+app.use(cors());
+app.use(express.json());
+
+// Add a simple health check route
+app.get('/', (req, res) => {
+  res.send('Eagle Chat Server is running');
+});
+
 const server = http.createServer(app);
 
 // Configure CORS for Socket.IO
-// Add this at the top of your file
-import dotenv from 'dotenv';
-dotenv.config();
-
-// Then update your CORS configuration
 const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
